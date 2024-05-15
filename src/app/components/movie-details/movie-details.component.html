@@ -1,0 +1,26 @@
+<button class="back-btn" type="button" (click)="goBack()">Go back</button>
+
+<div *ngIf="movie$ | async as movie">
+  <div class="main-information-container">
+    <img
+      class="poster"
+      [src]="movie.poster_path | posterUrl"
+      [alt]="movie.title"
+    />
+    <div class="main-information">
+      <h3>{{ movie.title }}</h3>
+      <p>User score {{ movie.vote_average / 10 | percent }}</p>
+      <h4>Overview</h4>
+      <p>{{ movie.overview }}</p>
+      <h4>Genres</h4>
+      <p>{{ movie.genres | genres }}</p>
+    </div>
+  </div>
+  <div class="additional-information">
+    <p>Additional information</p>
+    <a routerLink="cast">Cats</a>
+    <a routerLink="reviews">Reviews</a>
+  </div>
+
+  <router-outlet></router-outlet>
+</div>

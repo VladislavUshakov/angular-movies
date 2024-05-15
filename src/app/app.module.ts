@@ -3,16 +3,34 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { MovieListComponent } from './components/movie-list/movie-list.component';
+import { TrendingMoviesComponent } from './components/trending-movies/trending-movies.component';
+import { HttpClientModule } from '@angular/common/http';
+import { MovieDetailsComponent } from './components/movie-details/movie-details.component';
+import { PosterUrlPipe } from './pipes/poster-url.pipe';
+import { SearchingMoviesComponent } from './components/searching-movies/searching-movies.component';
+import { CastComponent } from './components/cast/cast.component';
+import { ReviewsComponent } from './components/reviews/reviews.component';
+import { GenresPipe } from './pipes/genres.pipe';
+import { MovieSearchComponent } from './components/movie-search/movie-search.component';
+import { MovieListPathPipe } from './pipes/movie-list-path.pipe';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    MovieListComponent,
+    TrendingMoviesComponent,
+    MovieDetailsComponent,
+    PosterUrlPipe,
+    SearchingMoviesComponent,
+    CastComponent,
+    ReviewsComponent,
+    GenresPipe,
+    MovieSearchComponent,
+    MovieListPathPipe,
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule
-  ],
+  imports: [BrowserModule, AppRoutingModule, HttpClientModule],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

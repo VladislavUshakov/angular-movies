@@ -1,0 +1,12 @@
+<ul *ngIf="movies" class="list">
+  <li *ngFor="let movie of movies" class="item">
+    <a [routerLink]="movie.id | movieListPath : route">
+      <h3>{{ movie.title }}</h3>
+      <img
+        class="image"
+        [src]="movie.poster_path | posterUrl"
+        [alt]="movie.title"
+      />
+    </a>
+  </li>
+</ul>
