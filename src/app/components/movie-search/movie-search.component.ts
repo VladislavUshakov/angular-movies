@@ -1,27 +1,46 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { debounceTime, distinctUntilChanged, fromEvent, map, Subject, takeUntil, tap } from 'rxjs';
 
 @Component({
   selector: 'app-movie-search',
   templateUrl: './movie-search.component.html',
   styleUrl: './movie-search.component.scss',
 })
-export class MovieSearchComponent {
-  constructor(private activatedRoute: ActivatedRoute, private router: Router) {}
+export class MovieSearchComponent implements OnInit, AfterViewInit, OnDestroy {
+  @ViewChild('search', { static: true }) private searchInput!: ElementRef<HTMLInputElement>;
 
-  setQuery(query: string) {
-    const q = query.trim();
+  private destroy$: Subject<void> = new Subject<void>();
 
-    const queryParams = q
-      ? { q }
-      : {
-          q: null,
-        };
+  constructor(
+    private activatedRoute: ActivatedRoute,
+    private router: Router,
+  ) {
+  }
 
-    this.router.navigate([], {
-      relativeTo: this.activatedRoute,
-      queryParams,
-      queryParamsHandling: 'merge',
-    });
+  ngOnInit(): void {
+    fromEvent(this.searchInput.nativeElement, 'input').pipe(
+      debounceTime(300),
+      map(() => this.searchInput.nativeElement.value),
+      distinctUntilChanged(),
+      tap((query: string) => this.router.navigate([], { queryParams: { query } })),
+      takeUntil(this.destroy$),
+    ).subscribe();
+  }
+
+  ngAfterViewInit(): void {
+    this.searchInput.nativeElement.value = this.activatedRoute.snapshot.queryParamMap.get('query') ?? '';
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }
