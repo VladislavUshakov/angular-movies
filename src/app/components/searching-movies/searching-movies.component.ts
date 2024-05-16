@@ -1,59 +1,30 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { MoviesApiService } from '../../services/movies-api.service';
-import {
-  Observable,
-  Subject,
-  Subscription,
-  debounceTime,
-  distinctUntilChanged,
-  map,
-  of,
-  startWith,
-  switchMap,
-} from 'rxjs';
+import { BehaviorSubject, Observable, of, switchMap } from 'rxjs';
 import { Movie } from '../../movie';
-import { ActivatedRoute, ParamMap } from '@angular/router';
 
 @Component({
   selector: 'app-searching-movies',
   templateUrl: './searching-movies.component.html',
   styleUrl: './searching-movies.component.scss',
 })
-export class SearchingMoviesComponent implements OnInit, OnDestroy {
+export class SearchingMoviesComponent implements OnInit {
   protected movies$: Observable<Movie[]> = of([]);
-  private searchTerms = new Subject<string>();
-  private subscription?: Subscription;
+  private searchTerms = new BehaviorSubject<string>('');
 
-  constructor(
-    private moviesApi: MoviesApiService,
-    private activatedRoute: ActivatedRoute
-  ) {}
+  @Input() set query(value: string) {
+    if (value) {
+      this.searchTerms.next(value);
+    }
+  }
+
+  constructor(private moviesApi: MoviesApiService) {}
 
   ngOnInit(): void {
     this.movies$ = this.searchTerms.pipe(
-      debounceTime(300),
-
-      distinctUntilChanged(),
-
-      switchMap((term: string) => this.moviesApi.fetchMoviesByKeyword(term)),
-
-      startWith([])
+      switchMap((term: string) =>
+        term ? this.moviesApi.fetchMoviesByKeyword(term) : of([])
+      )
     );
-
-    this.subscription = this.activatedRoute.queryParamMap
-      .pipe(map((q: ParamMap) => q.get('q')))
-      .subscribe((q) => {
-        if (q) {
-          this.search(q);
-        }
-      });
-  }
-
-  ngOnDestroy(): void {
-    this.subscription?.unsubscribe();
-  }
-
-  search(term: string): void {
-    this.searchTerms.next(term);
   }
 }
