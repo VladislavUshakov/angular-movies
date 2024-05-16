@@ -7,35 +7,23 @@ import { Genre, Movie, MovieDetails } from '../movie';
   providedIn: 'root',
 })
 export class MoviesApiService {
-  private apiKey: string =
-    'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI2MjEzMWI3YjFlZTUwNTIzMTBmYWVlNDEwNzkxMDViOCIsInN1YiI6IjY0MjM1NDY4ZmNiOGNjMDA5NzY0N2MzZiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.gXqVVAU3K9JjJFWpsxp8RtOAJsWG1ULtaJTKglxqZos';
-  private url: string = 'https://api.themoviedb.org/3';
-
-  httpOptions = {
-    headers: new HttpHeaders({
-      Authorization: `Bearer ${this.apiKey}`,
-    }),
-  };
-
   constructor(private http: HttpClient) {}
 
   fetchTrendingMovies(): Observable<Movie[]> {
-    return this.http
-      .get<any>(`${this.url}/trending/movie/day`, this.httpOptions)
-      .pipe(
-        map(({ results }) => {
-          return results.map((movie: Movie) => ({
-            id: movie.id,
-            title: movie.title,
-            poster_path: movie.poster_path,
-          }));
-        }),
-        catchError(this.handleError<Movie[]>('fetchTrendingMovies', []))
-      );
+    return this.http.get<any>('/trending/movie/day').pipe(
+      map(({ results }) => {
+        return results.map((movie: Movie) => ({
+          id: movie.id,
+          title: movie.title,
+          poster_path: movie.poster_path,
+        }));
+      }),
+      catchError(this.handleError<Movie[]>('fetchTrendingMovies', []))
+    );
   }
 
   fetchMovieDetails(id: number): Observable<MovieDetails | null> {
-    return this.http.get<any>(`${this.url}/movie/${id}`, this.httpOptions).pipe(
+    return this.http.get<any>(`/movie/${id}`).pipe(
       map((movie) => {
         const {
           id,
@@ -55,22 +43,17 @@ export class MoviesApiService {
   }
 
   fetchMoviesByKeyword(keyword: string) {
-    return this.http
-      .get<any>(
-        `${this.url}/search/movie?page=1&query=${keyword}`,
-        this.httpOptions
-      )
-      .pipe(
-        map((res) => res.results),
-        map((res) =>
-          res.map((movie: Movie) => ({
-            id: movie.id,
-            title: movie.title,
-            poster_path: movie.poster_path,
-          }))
-        ),
-        catchError(this.handleError<MovieDetails>('fetchMoviesByKeyword'))
-      );
+    return this.http.get<any>(`/search/movie?page=1&query=${keyword}`).pipe(
+      map((res) => res.results),
+      map((res) =>
+        res.map((movie: Movie) => ({
+          id: movie.id,
+          title: movie.title,
+          poster_path: movie.poster_path,
+        }))
+      ),
+      catchError(this.handleError<MovieDetails>('fetchMoviesByKeyword'))
+    );
   }
 
   private handleError<T>(operation = 'operation', result?: T) {

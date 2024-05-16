@@ -5,6 +5,7 @@ import { MovieDetailsComponent } from './components/movie-details/movie-details.
 import { SearchingMoviesComponent } from './components/searching-movies/searching-movies.component';
 import { CastComponent } from './components/cast/cast.component';
 import { ReviewsComponent } from './components/reviews/reviews.component';
+import { httpInterceptorProviders } from './http-interceptors';
 
 const routes: Routes = [
   { path: '', component: TrendingMoviesComponent },
@@ -32,5 +33,6 @@ const config: ExtraOptions = {
 @NgModule({
   imports: [RouterModule.forRoot(routes, config)],
   exports: [RouterModule],
+  providers: [httpInterceptorProviders],
 })
 export class AppRoutingModule {}
