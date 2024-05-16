@@ -1,1 +1,1 @@
-<app-movie-list [movies]="trendingMovies"></app-movie-list>
+<app-movie-list [movies]="(movies$ | async)!"></app-movie-list>

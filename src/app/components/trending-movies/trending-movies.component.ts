@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MoviesApiService } from '../../services/movies-api.service';
 import { Movie } from '../../movie';
+import { Observable, of } from 'rxjs';
 
 @Component({
   selector: 'app-trending-movies',
@@ -8,13 +9,11 @@ import { Movie } from '../../movie';
   styleUrl: './trending-movies.component.scss',
 })
 export class TrendingMoviesComponent implements OnInit {
-  public trendingMovies: Movie[] = [];
+  public movies$?: Observable<Movie[]> = of([]);
 
   constructor(private moviesApi: MoviesApiService) {}
 
   ngOnInit(): void {
-    this.moviesApi.fetchTrendingMovies().subscribe((movies) => {
-      this.trendingMovies = movies;
-    });
+    this.movies$ = this.moviesApi.fetchTrendingMovies();
   }
 }
