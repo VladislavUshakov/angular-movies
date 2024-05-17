@@ -14,6 +14,8 @@ import { ReviewsComponent } from './components/reviews/reviews.component';
 import { GenresPipe } from './pipes/genres.pipe';
 import { MovieSearchComponent } from './components/movie-search/movie-search.component';
 import { MovieListPathPipe } from './pipes/movie-list-path.pipe';
+import { LoaderComponent } from './components/loader/loader.component';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 
 @NgModule({
   declarations: [
@@ -28,9 +30,10 @@ import { MovieListPathPipe } from './pipes/movie-list-path.pipe';
     GenresPipe,
     MovieSearchComponent,
     MovieListPathPipe,
+    LoaderComponent,
   ],
   imports: [BrowserModule, AppRoutingModule, HttpClientModule],
-  providers: [],
+  providers: [provideAnimationsAsync()],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

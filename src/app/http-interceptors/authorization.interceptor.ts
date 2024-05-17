@@ -6,11 +6,11 @@ import {
   HttpRequest,
 } from '@angular/common/http';
 
-import { Observable } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 
 @Injectable()
 export class AuthorizationInterceptor implements HttpInterceptor {
-  private apiKey: string =
+  private readonly apiKey: string =
     'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI2MjEzMWI3YjFlZTUwNTIzMTBmYWVlNDEwNzkxMDViOCIsInN1YiI6IjY0MjM1NDY4ZmNiOGNjMDA5NzY0N2MzZiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.gXqVVAU3K9JjJFWpsxp8RtOAJsWG1ULtaJTKglxqZos';
 
   intercept(

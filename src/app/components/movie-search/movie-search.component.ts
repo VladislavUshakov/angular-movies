@@ -2,8 +2,10 @@ import {
   Component,
   ElementRef,
   Input,
+  QueryList,
   Renderer2,
   ViewChild,
+  ViewChildren,
 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
@@ -26,13 +28,7 @@ export class MovieSearchComponent {
   private searchInput!: ElementRef<HTMLInputElement>;
   private destroy$: Subject<void> = new Subject<void>();
 
-  // Why doesn't work
-
-  // @Input() set query(value: string) {
-  //   if (value) {
-  //     console.log('ins', value);
-  //   }
-  // }
+  @ViewChildren('search') test?: QueryList<ElementRef<HTMLInputElement>>;
 
   constructor(
     private router: Router,

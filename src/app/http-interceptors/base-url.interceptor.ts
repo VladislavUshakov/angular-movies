@@ -10,7 +10,7 @@ import { Observable } from 'rxjs';
 
 @Injectable()
 export class BaseUrlInterceptor implements HttpInterceptor {
-  private baseUrl: string = 'https://api.themoviedb.org/3';
+  private readonly baseUrl: string = 'https://api.themoviedb.org/3';
 
   intercept(
     req: HttpRequest<any>,

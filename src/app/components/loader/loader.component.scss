@@ -1,0 +1,16 @@
+.spinner {
+  margin: 20px auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 200px;
+  height: 200px;
+  background-color: tomato;
+  border-radius: 50%;
+
+  p {
+    color: white;
+    text-transform: uppercase;
+  }
+}
