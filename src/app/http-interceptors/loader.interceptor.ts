@@ -4,27 +4,31 @@ import {
   HttpInterceptor,
   HttpHandler,
   HttpRequest,
+  HttpContextToken,
 } from '@angular/common/http';
 
-import { Observable, tap } from 'rxjs';
+import { Observable, finalize } from 'rxjs';
 import { LoaderService } from '../services/loader.service';
+
+export const SkipLoading = new HttpContextToken<boolean>(() => false);
 
 @Injectable()
 export class LoaderInterceptor implements HttpInterceptor {
-  constructor(private loader: LoaderService) {}
+  constructor(private loaderService: LoaderService) {}
 
   intercept(
     req: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
-    // const url = req.url.split('?')[0].split('/').join('_');
-    this.loader.show();
+    if (req.context.get(SkipLoading)) {
+      return next.handle(req);
+    }
+
+    this.loaderService.show();
 
     return next.handle(req).pipe(
-      tap((res) => {
-        if (res.type) {
-          this.loader.hide();
-        }
+      finalize(() => {
+        this.loaderService.hide();
       })
     );
   }

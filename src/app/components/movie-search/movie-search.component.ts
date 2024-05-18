@@ -28,8 +28,6 @@ export class MovieSearchComponent {
   private searchInput!: ElementRef<HTMLInputElement>;
   private destroy$: Subject<void> = new Subject<void>();
 
-  @ViewChildren('search') test?: QueryList<ElementRef<HTMLInputElement>>;
-
   constructor(
     private router: Router,
     private renderer: Renderer2,
@@ -37,23 +35,17 @@ export class MovieSearchComponent {
   ) {}
 
   ngAfterViewInit(): void {
-    //
-    const query: string =
-      this.activatedRoute.snapshot.queryParamMap.get('query') ?? '';
-
-    if (query) {
-      this.renderer.setProperty(this.searchInput.nativeElement, 'value', query);
-    }
-    //
+    this.setDefaultInputValue();
 
     fromEvent(this.searchInput.nativeElement, 'input')
       .pipe(
         debounceTime(300),
         map(() => this.searchInput.nativeElement.value),
         distinctUntilChanged(),
-        tap((query: string) =>
-          this.router.navigate([], { queryParams: { query } })
-        ),
+        tap((query: string) => {
+          this.searchInput.nativeElement.blur();
+          this.router.navigate([], { queryParams: { query } });
+        }),
         takeUntil(this.destroy$)
       )
       .subscribe();
@@ -62,5 +54,14 @@ export class MovieSearchComponent {
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+  }
+
+  setDefaultInputValue() {
+    const query: string =
+      this.activatedRoute.snapshot.queryParamMap.get('query') ?? '';
+
+    if (query) {
+      this.renderer.setProperty(this.searchInput.nativeElement, 'value', query);
+    }
   }
 }

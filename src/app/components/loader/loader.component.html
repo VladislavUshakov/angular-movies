@@ -1,5 +1,15 @@
-@if (loader$ |async) {
-<div class="spinner">
-  <p>Spinner</p>
+@if(loader$ | async) {
+
+<div class="spinner-container">
+  @if(customLoadingIndicator) {
+
+  <ng-container *ngTemplateOutlet="customLoadingIndicator" />
+
+  } @else {
+
+  <mat-spinner />
+
+  }
 </div>
+
 }

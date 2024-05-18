@@ -1,4 +1,3 @@
-<app-loader></app-loader>
 <ul *ngIf="movies" class="list">
   <li *ngFor="let movie of movies" class="item">
     <a [routerLink]="movie.id | movieListPath : route">

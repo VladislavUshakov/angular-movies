@@ -16,6 +16,7 @@ import { MovieSearchComponent } from './components/movie-search/movie-search.com
 import { MovieListPathPipe } from './pipes/movie-list-path.pipe';
 import { LoaderComponent } from './components/loader/loader.component';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @NgModule({
   declarations: [
@@ -32,7 +33,12 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
     MovieListPathPipe,
     LoaderComponent,
   ],
-  imports: [BrowserModule, AppRoutingModule, HttpClientModule],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    HttpClientModule,
+    MatProgressSpinnerModule,
+  ],
   providers: [provideAnimationsAsync()],
   bootstrap: [AppComponent],
 })
