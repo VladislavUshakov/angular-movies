@@ -17,6 +17,7 @@ import { MovieListPathPipe } from './pipes/movie-list-path.pipe';
 import { LoaderComponent } from './components/loader/loader.component';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -38,6 +39,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     AppRoutingModule,
     HttpClientModule,
     MatProgressSpinnerModule,
+    ReactiveFormsModule,
   ],
   providers: [provideAnimationsAsync()],
   bootstrap: [AppComponent],

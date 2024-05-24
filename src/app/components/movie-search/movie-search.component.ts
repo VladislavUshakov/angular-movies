@@ -1,18 +1,10 @@
-import {
-  Component,
-  ElementRef,
-  Input,
-  QueryList,
-  Renderer2,
-  ViewChild,
-  ViewChildren,
-} from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
   Subject,
   debounceTime,
   distinctUntilChanged,
-  fromEvent,
   map,
   takeUntil,
   tap,
@@ -23,29 +15,21 @@ import {
   templateUrl: './movie-search.component.html',
   styleUrl: './movie-search.component.scss',
 })
-export class MovieSearchComponent {
-  @ViewChild('search')
-  private searchInput!: ElementRef<HTMLInputElement>;
+export class MovieSearchComponent implements OnInit, OnDestroy {
   private destroy$: Subject<void> = new Subject<void>();
+  public searchControl = new FormControl(this.getValueFromUrlParams('query'));
 
-  constructor(
-    private router: Router,
-    private renderer: Renderer2,
-    private activatedRoute: ActivatedRoute
-  ) {}
+  constructor(private activatedRoute: ActivatedRoute, private router: Router) {}
 
-  ngAfterViewInit(): void {
-    this.setDefaultInputValue();
-
-    fromEvent(this.searchInput.nativeElement, 'input')
+  ngOnInit(): void {
+    this.searchControl.valueChanges
       .pipe(
         debounceTime(300),
-        map(() => this.searchInput.nativeElement.value),
         distinctUntilChanged(),
-        tap((query: string) => {
-          this.searchInput.nativeElement.blur();
+        tap((query) => {
           this.router.navigate([], { queryParams: { query } });
         }),
+        map(() => null),
         takeUntil(this.destroy$)
       )
       .subscribe();
@@ -56,12 +40,7 @@ export class MovieSearchComponent {
     this.destroy$.complete();
   }
 
-  setDefaultInputValue() {
-    const query: string =
-      this.activatedRoute.snapshot.queryParamMap.get('query') ?? '';
-
-    if (query) {
-      this.renderer.setProperty(this.searchInput.nativeElement, 'value', query);
-    }
+  getValueFromUrlParams(key: string): string {
+    return this.activatedRoute.snapshot.queryParamMap.get(key) ?? '';
   }
 }
